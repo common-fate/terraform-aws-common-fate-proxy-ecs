@@ -53,7 +53,7 @@ variable "aws_account_id" {
 variable "release_tag" {
   description = "Defines the tag for frontend and backend images, typically a git commit hash."
   type        = string
-  default     = "v0.0.2"
+  default     = "v0.1.0"
 }
 
 

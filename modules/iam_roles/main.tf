@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "assume_roles_policy" {
 
     # Optionally apply the external ID to the policy if it is supplied
     dynamic "condition" {
-      for_each = var.assume_role_external_id != "" ? [1] : []
+      for_each = var.assume_role_external_id != null ? [1] : []
       content {
         test     = "StringEquals"
         variable = "sts:ExternalId"

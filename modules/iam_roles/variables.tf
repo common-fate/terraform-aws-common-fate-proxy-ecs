@@ -16,9 +16,10 @@ variable "common_fate_aws_account_id" {
 }
 
 variable "assume_role_external_id" {
-  description = "The external id to be used for the IAM policy trust relation"
   type        = string
-  default     = ""
+  nullable    = true
+  description = "External ID to use when assuming cross-account AWS roles."
+  default     = null
 }
 
 variable "aws_region" {
