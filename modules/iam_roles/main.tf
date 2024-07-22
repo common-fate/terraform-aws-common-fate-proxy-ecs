@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "assume_roles_policy" {
   }
 }
 resource "aws_iam_role" "read_role" {
-  name               = "${var.namespace}-${var.stage}-ecs-task-reader-role"
+  name               = "${var.name_prefix}-ecs-task-reader-role"
   description        = "A role used by Common Fate to read task IDs in an ECS cluster"
   assume_role_policy = data.aws_iam_policy_document.assume_roles_policy.json
   tags = {
@@ -35,7 +35,7 @@ resource "aws_iam_role" "read_role" {
 }
 
 resource "aws_iam_policy" "ecs_read" {
-  name        = "${var.namespace}-${var.stage}-ecs-task-read"
+  name        = "${var.name_prefix}-ecs-task-read"
   description = "Allows Common Fate to read task IDs in an ECS cluster"
 
   policy = jsonencode({
@@ -47,7 +47,10 @@ resource "aws_iam_policy" "ecs_read" {
         "Action" : [
           "ecs:ListTasks"
         ],
-        "Resource" : "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:cluster/${var.ecs_cluster_name}"
+        "Resource" : [
+          "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:cluster/${var.ecs_cluster_name}",
+          "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:container-instance/common-fate-demo-cluster/*"
+        ]
       },
       {
         "Sid" : "DescribeTasks",

@@ -18,6 +18,7 @@ locals {
 
 module "iam_roles" {
   source                     = "./modules/iam_roles"
+  name_prefix                = local.name_prefix
   assume_role_external_id    = var.assume_role_external_id
   aws_account_id             = var.aws_account_id
   aws_region                 = var.aws_region
