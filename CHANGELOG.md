@@ -1,5 +1,12 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 1.1.2
+
+### Patch Changes
+
+- e9125c9: Fix ecs read role resource
+- 29b60bd: Add cluster name variable to fix permissions issue
+
 ## 1.1.1
 
 ### Patch Changes
