@@ -49,7 +49,7 @@ resource "aws_iam_policy" "ecs_read" {
         ],
         "Resource" : [
           "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:cluster/${var.ecs_cluster_name}",
-          "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:container-instance/common-fate-demo-cluster/*"
+          "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:container-instance/${var.ecs_cluster_name}/*"
         ]
       },
       {
