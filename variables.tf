@@ -62,6 +62,12 @@ variable "ecs_cluster_id" {
   type        = string
 }
 
+
+variable "ecs_cluster_name" {
+  description = "Identifies the Amazon Elastic Container Service (ECS) cluster for deployment."
+  type        = string
+}
+
 variable "log_retention_in_days" {
   description = "Specifies the cloudwatch log retention period."
   default     = 365

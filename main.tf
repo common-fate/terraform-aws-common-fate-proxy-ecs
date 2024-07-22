@@ -14,9 +14,7 @@ locals {
   ])
 }
 
-data "aws_ecs_cluster" "cluster" {
-  cluster_name = var.ecs_cluster_id
-}
+
 
 module "iam_roles" {
   source                     = "./modules/iam_roles"
@@ -24,7 +22,7 @@ module "iam_roles" {
   aws_account_id             = var.aws_account_id
   aws_region                 = var.aws_region
   common_fate_aws_account_id = var.common_fate_aws_account_id
-  ecs_cluster_name           = data.aws_ecs_cluster.cluster.cluster_name
+  ecs_cluster_name           = var.ecs_cluster_name
 }
 
 
