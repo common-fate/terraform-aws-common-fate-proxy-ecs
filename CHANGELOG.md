@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 1.2.1
+
+### Patch Changes
+
+- 495cf2c: Add id back in to variables
+
 ## 1.2.0
 
 ### Minor Changes
