@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 1.2.0
+
+### Minor Changes
+
+- f7d6db4: Use a generated ID for the proxy and related resources
+
 ## 1.1.2
 
 ### Patch Changes
