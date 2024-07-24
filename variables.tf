@@ -10,11 +10,6 @@ variable "stage" {
   type        = string
 }
 
-variable "name_prefix" {
-  description = "A unique identifier consisting of letters, numbers, and hyphens. can optionally be left empty when only deploying a single instance of this module"
-  type        = string
-  default     = ""
-}
 
 variable "app_url" {
   description = "The app url (e.g., 'https://common-fate.mydomain.com')."
@@ -117,11 +112,6 @@ variable "proxy_image_repository" {
   default     = "public.ecr.aws/z2x0a3a1/common-fate-deployment/proxy"
 }
 
-
-variable "integration_id" {
-  description = "The ID of the integration in Common Fate."
-  type        = string
-}
 
 variable "databases" {
   description = "List of databases"

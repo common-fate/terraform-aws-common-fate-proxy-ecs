@@ -2,10 +2,15 @@
 # AWS Proxy ECS Task
 ######################################################
 
+resource "random_id" "proxy" {
+  byte_length = 8
+}
+
+
 data "aws_caller_identity" "current" {}
 
 locals {
-  name_prefix    = join("-", compact([var.namespace, var.stage, var.name_prefix]))
+  name_prefix    = join("-", compact([var.namespace, var.stage, random_id.proxy.hex]))
   databases_json = jsonencode(var.databases)
   password_secrets_manager_arns = flatten([
     for db in var.databases : [
@@ -218,7 +223,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
       },
       {
         name  = "CF_INTEGRATION_ID"
-        value = var.integration_id
+        value = random_id.proxy.hex
       },
       {
         name  = "CF_DATABASES",
