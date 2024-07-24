@@ -10,6 +10,10 @@ variable "stage" {
   type        = string
 }
 
+variable "id" {
+  description = "the ID for this proxy e.g prod-us-west-2."
+  type        = string
+}
 
 variable "app_url" {
   description = "The app url (e.g., 'https://common-fate.mydomain.com')."
