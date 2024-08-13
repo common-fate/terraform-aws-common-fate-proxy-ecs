@@ -57,13 +57,13 @@ variable "release_tag" {
 
 
 variable "ecs_cluster_id" {
-  description = "Identifies the Amazon Elastic Container Service (ECS) cluster for deployment."
+  description = "The ARN of the Amazon Elastic Container Service (ECS) cluster for deployment."
   type        = string
 }
 
 
 variable "ecs_cluster_name" {
-  description = "Identifies the Amazon Elastic Container Service (ECS) cluster for deployment."
+  description = "The name of Amazon Elastic Container Service (ECS) cluster for deployment."
   type        = string
 }
 
