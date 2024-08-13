@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 1.2.2
+
+### Patch Changes
+
+- 945479c: Fix documentation on ecs_cluster_id and ecs_cluster_name variables
+
 ## 1.2.1
 
 ### Patch Changes
