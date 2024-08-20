@@ -1,5 +1,12 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 1.4.0
+
+### Minor Changes
+
+- d713921: Improved logging.
+- d713921: The Proxy service now handles SIGINT and closes active connections when being shutdown by ECS.
+
 ## 1.3.0
 
 ### Minor Changes
