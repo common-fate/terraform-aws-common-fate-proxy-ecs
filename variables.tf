@@ -50,9 +50,9 @@ variable "aws_account_id" {
 }
 
 variable "release_tag" {
-  description = "Defines the tag for frontend and backend images, typically a git commit hash."
+  description = "Defines the tag for the Proxy service container."
   type        = string
-  default     = "v0.2.0"
+  default     = "v0.3.0"
 }
 
 
