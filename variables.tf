@@ -52,7 +52,7 @@ variable "aws_account_id" {
 variable "release_tag" {
   description = "Defines the tag for the Proxy service container."
   type        = string
-  default     = "v0.3.0"
+  default     = "v0.3.1"
 }
 
 
