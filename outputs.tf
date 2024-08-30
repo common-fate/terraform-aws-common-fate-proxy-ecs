@@ -17,3 +17,8 @@ output "security_group_id" {
   description = "The ID of the security group"
   value       = aws_security_group.ecs_proxy_sg.id
 }
+
+output "id" {
+  description = "The unique ID of the registered proxy"
+  value = commonfate_ecs_proxy.proxy.ID
+}
