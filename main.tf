@@ -6,12 +6,8 @@ data "aws_caller_identity" "current" {}
 
 locals {
   name_prefix    = join("-", compact([var.namespace, var.stage, var.id]))
-  databases_json = jsonencode(var.databases)
-  password_secrets_manager_arns = flatten([
-    for db in var.databases : [
-      for user in db.users : user.passwordSecretsManagerARN
-    ]
-  ])
+
+  
 }
 
 
@@ -110,23 +106,6 @@ resource "aws_iam_role" "proxy_ecs_task_role" {
     ]
   })
 }
-resource "aws_iam_policy" "database_secrets_read_access" {
-  name        = "${var.namespace}-${var.stage}-proxy-ecs-sm"
-  description = "Allows pull database secret from secrets manager"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        "Action" : [
-          "secretsmanager:GetSecretValue"
-        ],
-        "Resource" : local.password_secrets_manager_arns
-      }
-    ]
-  })
-}
 
 
 resource "aws_iam_role_policy_attachment" "ecs_task_role_ssm" {
@@ -220,10 +199,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
         name  = "CF_INTEGRATION_ID"
         value = var.id
       },
-      {
-        name  = "CF_DATABASES",
-        value = local.databases_json
-      },
+      
       {
         name  = "CF_ECS_CLUSTER_READ_ROLE_ARN"
         value = module.iam_roles.read_role_arn
