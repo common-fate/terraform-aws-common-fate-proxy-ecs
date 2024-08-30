@@ -162,10 +162,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_ssm_perms" {
   role       = aws_iam_role.proxy_ecs_execution_role.name
   policy_arn = aws_iam_policy.ssm_permissions_role.arn
 }
-resource "aws_iam_role_policy_attachment" "proxy_ecs_task_database_secrets_access_attach" {
-  role       = aws_iam_role.proxy_ecs_task_role.name
-  policy_arn = aws_iam_policy.database_secrets_read_access.arn
-}
+
 
 
 resource "aws_ecs_task_definition" "proxy_task" {
