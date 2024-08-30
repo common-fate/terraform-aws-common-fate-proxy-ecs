@@ -272,3 +272,14 @@ resource "aws_ecs_service" "proxy_service" {
   }
 }
 
+resource "commonfate_ecs_proxy" "proxy" {
+  id                            = var.id
+  aws_account_id                = var.aws_account_id
+  aws_region                    = var.aws_region
+  ecs_cluster_name              = var.ecs_cluster_name
+  ecs_task_definition_family    = "${local.name_prefix}-proxy"
+  ecs_cluster_reader_role_arn   = module.iam_roles.read_role_arn
+  ecs_cluster_security_group_id = aws_security_group.ecs_proxy_sg.id
+  ecs_cluster_task_role_name    = aws_iam_role.proxy_ecs_task_role.arn
+
+}

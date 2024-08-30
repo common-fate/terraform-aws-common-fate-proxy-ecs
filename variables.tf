@@ -117,33 +117,6 @@ variable "proxy_image_repository" {
 }
 
 
-variable "databases" {
-  description = "List of databases"
-  type = list(object({
-    // the  instance id
-    instance_id = string
-    // the endpoint for the  instance
-    endpoint = string
-    // the name for the AWS::::Database resource
-    name = string
-    // the name of the database on the instance
-    database = string
-    // the engine of the database on the instance, mysql or postgres
-    engine = string
-
-    users = list(object({
-      // the name for the AWS::::DatabaseUser resource
-      name = string
-      // the username to connect to the database with
-      username = string
-      // the ARN of the password in secrets manager for this user
-      passwordSecretsManagerARN = string
-    }))
-  }))
-
-}
-
-
 variable "assume_role_external_id" {
   type        = string
   nullable    = true
