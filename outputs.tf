@@ -20,5 +20,5 @@ output "security_group_id" {
 
 output "id" {
   description = "The unique ID of the registered proxy"
-  value = commonfate_ecs_proxy.proxy.ID
+  value = commonfate_ecs_proxy.proxy.id
 }
