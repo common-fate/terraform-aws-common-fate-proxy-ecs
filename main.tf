@@ -14,7 +14,7 @@ terraform {
   required_providers {
     commonfate = {
       source  = "common-fate/commonfate"
-      version = "2.25.0-alpha5"
+      version = "2.25.0-alpha6"
     }
 
     
@@ -264,5 +264,7 @@ resource "commonfate_ecs_proxy" "proxy" {
   ecs_cluster_reader_role_arn   = module.iam_roles.read_role_arn
   ecs_cluster_security_group_id = aws_security_group.ecs_proxy_sg.id
   ecs_cluster_task_role_name    = aws_iam_role.proxy_ecs_task_role.name
+  ecs_cluster_task_container_name = "aws-proxy-container"
+
 
 }
