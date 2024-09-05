@@ -1,27 +1,30 @@
-######################################################
-# AWS Proxy ECS Task
-######################################################
-
-data "aws_caller_identity" "current" {}
-
-locals {
-  name_prefix    = join("-", compact([var.namespace, var.stage, var.id]))
-  databases_json = jsonencode(var.databases)
-  password_secrets_manager_arns = flatten([
-    for db in var.databases : [
-      for user in db.users : user.passwordSecretsManagerARN
-    ]
-  ])
+terraform {
+  required_providers {
+    commonfate = {
+      source  = "common-fate/commonfate"
+      version = "2.25.0-alpha10"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
 }
 
-
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+locals {
+  name_prefix    = join("-", compact([var.namespace, var.stage, var.id]))
+  aws_account_id = data.aws_caller_identity.current.account_id
+  aws_region     = data.aws_region.current.name
+}
 
 module "iam_roles" {
   source                     = "./modules/iam_roles"
   name_prefix                = local.name_prefix
   assume_role_external_id    = var.assume_role_external_id
-  aws_account_id             = var.aws_account_id
-  aws_region                 = var.aws_region
+  aws_account_id             = local.aws_account_id
+  aws_region                 = local.aws_region
   common_fate_aws_account_id = var.common_fate_aws_account_id
   ecs_cluster_name           = var.ecs_cluster_name
 }
@@ -69,10 +72,10 @@ resource "aws_iam_role" "proxy_ecs_execution_role" {
         }
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:*"
+            "aws:SourceArn" = "arn:aws:ecs:${local.aws_region}:${local.aws_account_id}:*"
           }
           StringEquals = {
-            "aws:SourceAccount" : "${var.aws_account_id}"
+            "aws:SourceAccount" : "${local.aws_account_id}"
           }
         }
       }
@@ -100,29 +103,12 @@ resource "aws_iam_role" "proxy_ecs_task_role" {
         }
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:*"
+            "aws:SourceArn" = "arn:aws:ecs:${local.aws_region}:${local.aws_account_id}:*"
           }
           StringEquals = {
-            "aws:SourceAccount" : "${var.aws_account_id}"
+            "aws:SourceAccount" : "${local.aws_account_id}"
           }
         }
-      }
-    ]
-  })
-}
-resource "aws_iam_policy" "database_secrets_read_access" {
-  name        = "${var.namespace}-${var.stage}-proxy-ecs-sm"
-  description = "Allows pull database secret from secrets manager"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        "Action" : [
-          "secretsmanager:GetSecretValue"
-        ],
-        "Resource" : local.password_secrets_manager_arns
       }
     ]
   })
@@ -164,10 +150,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_ssm_perms" {
   role       = aws_iam_role.proxy_ecs_execution_role.name
   policy_arn = aws_iam_policy.ssm_permissions_role.arn
 }
-resource "aws_iam_role_policy_attachment" "proxy_ecs_task_database_secrets_access_attach" {
-  role       = aws_iam_role.proxy_ecs_task_role.name
-  policy_arn = aws_iam_policy.database_secrets_read_access.arn
-}
+
 
 
 resource "aws_ecs_task_definition" "proxy_task" {
@@ -220,10 +203,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
         name  = "CF_INTEGRATION_ID"
         value = var.id
       },
-      {
-        name  = "CF_DATABASES",
-        value = local.databases_json
-      },
+
       {
         name  = "CF_ECS_CLUSTER_READ_ROLE_ARN"
         value = module.iam_roles.read_role_arn
@@ -235,7 +215,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
       logDriver = "awslogs",
       options = {
         "awslogs-group"         = aws_cloudwatch_log_group.proxy_log_group.name,
-        "awslogs-region"        = var.aws_region,
+        "awslogs-region"        = local.aws_region,
         "awslogs-stream-prefix" = "aws-proxy"
       }
     },
@@ -272,3 +252,16 @@ resource "aws_ecs_service" "proxy_service" {
   }
 }
 
+resource "commonfate_ecs_proxy" "proxy" {
+  id                              = var.id
+  aws_account_id                  = local.aws_account_id
+  aws_region                      = local.aws_region
+  ecs_cluster_name                = var.ecs_cluster_name
+  ecs_task_definition_family      = "${local.name_prefix}-proxy"
+  ecs_cluster_reader_role_arn     = module.iam_roles.read_role_arn
+  ecs_cluster_security_group_id   = aws_security_group.ecs_proxy_sg.id
+  ecs_cluster_task_role_name      = aws_iam_role.proxy_ecs_task_role.name
+  ecs_cluster_task_container_name = "aws-proxy-container"
+
+
+}

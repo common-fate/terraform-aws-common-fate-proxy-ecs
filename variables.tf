@@ -11,7 +11,7 @@ variable "stage" {
 }
 
 variable "id" {
-  description = "the ID for this proxy e.g prod-us-west-2."
+  description = "The ID for this proxy e.g prod-us-west-2."
   type        = string
 }
 
@@ -34,19 +34,6 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "Lists the subnet IDs for deployment."
   type        = list(string)
-}
-
-
-variable "aws_region" {
-  description = "Determines the AWS Region for deployment."
-  type        = string
-}
-variable "aws_partition" {
-  description = "The AWS partition the module is being deployed to"
-}
-variable "aws_account_id" {
-  description = "Determines the AWS account ID for deployment."
-  type        = string
 }
 
 variable "release_tag" {
@@ -114,33 +101,6 @@ variable "proxy_image_repository" {
   type        = string
   description = "Docker image repository to use for the Provisioner image"
   default     = "public.ecr.aws/z2x0a3a1/common-fate-deployment/proxy"
-}
-
-
-variable "databases" {
-  description = "List of databases"
-  type = list(object({
-    // the  instance id
-    instance_id = string
-    // the endpoint for the  instance
-    endpoint = string
-    // the name for the AWS::::Database resource
-    name = string
-    // the name of the database on the instance
-    database = string
-    // the engine of the database on the instance, mysql or postgres
-    engine = string
-
-    users = list(object({
-      // the name for the AWS::::DatabaseUser resource
-      name = string
-      // the username to connect to the database with
-      username = string
-      // the ARN of the password in secrets manager for this user
-      passwordSecretsManagerARN = string
-    }))
-  }))
-
 }
 
 
