@@ -12,21 +12,19 @@ terraform {
 }
 
 data "aws_caller_identity" "current" {}
-
+data "aws_region" "current" {}
 locals {
-  name_prefix = join("-", compact([var.namespace, var.stage, var.id]))
-
-
+  name_prefix    = join("-", compact([var.namespace, var.stage, var.id]))
+  aws_account_id = data.aws_caller_identity.current.account_id
+  aws_region     = data.aws_region.current.name
 }
-
-
 
 module "iam_roles" {
   source                     = "./modules/iam_roles"
   name_prefix                = local.name_prefix
   assume_role_external_id    = var.assume_role_external_id
-  aws_account_id             = var.aws_account_id
-  aws_region                 = var.aws_region
+  aws_account_id             = local.aws_account_id
+  aws_region                 = local.aws_region
   common_fate_aws_account_id = var.common_fate_aws_account_id
   ecs_cluster_name           = var.ecs_cluster_name
 }
@@ -74,10 +72,10 @@ resource "aws_iam_role" "proxy_ecs_execution_role" {
         }
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:*"
+            "aws:SourceArn" = "arn:aws:ecs:${local.aws_region}:${local.aws_account_id}:*"
           }
           StringEquals = {
-            "aws:SourceAccount" : "${var.aws_account_id}"
+            "aws:SourceAccount" : "${local.aws_account_id}"
           }
         }
       }
@@ -105,10 +103,10 @@ resource "aws_iam_role" "proxy_ecs_task_role" {
         }
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:*"
+            "aws:SourceArn" = "arn:aws:ecs:${local.aws_region}:${local.aws_account_id}:*"
           }
           StringEquals = {
-            "aws:SourceAccount" : "${var.aws_account_id}"
+            "aws:SourceAccount" : "${local.aws_account_id}"
           }
         }
       }
@@ -217,7 +215,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
       logDriver = "awslogs",
       options = {
         "awslogs-group"         = aws_cloudwatch_log_group.proxy_log_group.name,
-        "awslogs-region"        = var.aws_region,
+        "awslogs-region"        = local.aws_region,
         "awslogs-stream-prefix" = "aws-proxy"
       }
     },
@@ -256,8 +254,8 @@ resource "aws_ecs_service" "proxy_service" {
 
 resource "commonfate_ecs_proxy" "proxy" {
   id                              = var.id
-  aws_account_id                  = var.aws_account_id
-  aws_region                      = var.aws_region
+  aws_account_id                  = local.aws_account_id
+  aws_region                      = local.aws_region
   ecs_cluster_name                = var.ecs_cluster_name
   ecs_task_definition_family      = "${local.name_prefix}-proxy"
   ecs_cluster_reader_role_arn     = module.iam_roles.read_role_arn

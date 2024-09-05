@@ -11,7 +11,7 @@ variable "stage" {
 }
 
 variable "id" {
-  description = "the ID for this proxy e.g prod-us-west-2."
+  description = "The ID for this proxy e.g prod-us-west-2."
   type        = string
 }
 
@@ -34,19 +34,6 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "Lists the subnet IDs for deployment."
   type        = list(string)
-}
-
-
-variable "aws_region" {
-  description = "Determines the AWS Region for deployment."
-  type        = string
-}
-variable "aws_partition" {
-  description = "The AWS partition the module is being deployed to"
-}
-variable "aws_account_id" {
-  description = "Determines the AWS account ID for deployment."
-  type        = string
 }
 
 variable "release_tag" {
