@@ -1,25 +1,24 @@
-######################################################
-# AWS Proxy ECS Task
-######################################################
-
-data "aws_caller_identity" "current" {}
-
-locals {
-  name_prefix    = join("-", compact([var.namespace, var.stage, var.id]))
-
-  
-}
-
 terraform {
   required_providers {
     commonfate = {
       source  = "common-fate/commonfate"
-      version = "2.25.0-alpha9"
+      version = "2.25.0-alpha10"
     }
-
-    
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
 }
+
+data "aws_caller_identity" "current" {}
+
+locals {
+  name_prefix = join("-", compact([var.namespace, var.stage, var.id]))
+
+
+}
+
 
 
 module "iam_roles" {
@@ -206,7 +205,7 @@ resource "aws_ecs_task_definition" "proxy_task" {
         name  = "CF_INTEGRATION_ID"
         value = var.id
       },
-      
+
       {
         name  = "CF_ECS_CLUSTER_READ_ROLE_ARN"
         value = module.iam_roles.read_role_arn
@@ -256,14 +255,14 @@ resource "aws_ecs_service" "proxy_service" {
 }
 
 resource "commonfate_ecs_proxy" "proxy" {
-  id                            = var.id
-  aws_account_id                = var.aws_account_id
-  aws_region                    = var.aws_region
-  ecs_cluster_name              = var.ecs_cluster_name
-  ecs_task_definition_family    = "${local.name_prefix}-proxy"
-  ecs_cluster_reader_role_arn   = module.iam_roles.read_role_arn
-  ecs_cluster_security_group_id = aws_security_group.ecs_proxy_sg.id
-  ecs_cluster_task_role_name    = aws_iam_role.proxy_ecs_task_role.name
+  id                              = var.id
+  aws_account_id                  = var.aws_account_id
+  aws_region                      = var.aws_region
+  ecs_cluster_name                = var.ecs_cluster_name
+  ecs_task_definition_family      = "${local.name_prefix}-proxy"
+  ecs_cluster_reader_role_arn     = module.iam_roles.read_role_arn
+  ecs_cluster_security_group_id   = aws_security_group.ecs_proxy_sg.id
+  ecs_cluster_task_role_name      = aws_iam_role.proxy_ecs_task_role.name
   ecs_cluster_task_container_name = "aws-proxy-container"
 
 
