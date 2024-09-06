@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.0
+
+### Major Changes
+
+- 4bcafbc: This new major version of the proxy seperates databases from the proxy infrastructure configuration.
+
 ## 1.4.1
 
 ### Patch Changes
