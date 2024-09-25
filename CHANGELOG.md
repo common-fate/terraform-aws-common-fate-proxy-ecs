@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.1
+
+### Patch Changes
+
+- 3b7fb60: Add "aurora-postgresql" and "aurora-mysql" as supported database engines.
+
 ## 2.0.0
 
 ### Major Changes
