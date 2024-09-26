@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.2
+
+### Patch Changes
+
+- 1f03dcc: Fixes an issue where the mysql proxy would not report the correct server version, causing some clients to fail to connect due to using unsupported features. The proxy now correctly reports the version and charset of the target server.
+
 ## 2.0.1
 
 ### Patch Changes
