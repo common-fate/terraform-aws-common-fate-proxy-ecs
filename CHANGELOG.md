@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.3
+
+### Patch Changes
+
+- 31d9f46: Added the ability to specify an override for the rds endpoint per rds user to allow read roles to use a read only replica endpoint.
+
 ## 2.0.2
 
 ### Patch Changes
