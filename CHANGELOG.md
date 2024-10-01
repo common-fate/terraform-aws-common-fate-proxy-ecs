@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.4
+
+### Patch Changes
+
+- c540cf6: Fix version constraint for the Common Fate Terraform provider to allow minor version updates.
+
 ## 2.0.3
 
 ### Patch Changes
