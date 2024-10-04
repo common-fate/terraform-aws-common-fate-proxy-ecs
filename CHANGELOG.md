@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.5
+
+### Patch Changes
+
+- 7159fcb: Relax common-fate/commonfate provider version constraint to ">= 2.25.3, < 3.0.0"
+
 ## 2.0.4
 
 ### Patch Changes
