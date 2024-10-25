@@ -39,7 +39,7 @@ variable "subnet_ids" {
 variable "release_tag" {
   description = "Defines the tag for the Proxy service container."
   type        = string
-  default     = "v1.0.3"
+  default     = "v1.0.4"
 }
 
 
