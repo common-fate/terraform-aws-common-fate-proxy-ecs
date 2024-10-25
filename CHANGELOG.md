@@ -1,5 +1,11 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.0.6
+
+### Patch Changes
+
+- caa4106: Only validate the database and role that the user is trying to connect to, rather than every single database and role.
+
 ## 2.0.5
 
 ### Patch Changes
