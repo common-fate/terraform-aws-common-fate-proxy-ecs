@@ -116,7 +116,7 @@ resource "aws_iam_role" "proxy_ecs_task_role" {
 
 resource "aws_iam_policy" "tagged_assume_role_policy" {
   name        = "allow-assume-proxy-ecs-tr-for-tagged-roles"
-  description = "Policy to allow assuming roles only if they have a ommon-fate-aws-proxy-access-role tag"
+  description = "Policy to allow assuming roles only if they have a common-fate-aws-proxy-access-role tag"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -127,7 +127,7 @@ resource "aws_iam_policy" "tagged_assume_role_policy" {
         Resource = "*"
         Condition = {
           StringEquals = {
-            "aws:ResourceTag/ommon-fate-aws-proxy-access-role" = "true"
+            "aws:ResourceTag/common-fate-aws-proxy-access-role" = "true"
           }
         }
       }
