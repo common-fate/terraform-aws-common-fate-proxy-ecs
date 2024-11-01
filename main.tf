@@ -114,6 +114,32 @@ resource "aws_iam_role" "proxy_ecs_task_role" {
   })
 }
 
+resource "aws_iam_policy" "tagged_assume_role_policy" {
+  name        = "allow-assume-proxy-ecs-tr-for-tagged-roles"
+  description = "Policy to allow assuming roles only if they have a ommon-fate-aws-proxy-access-role tag"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "aws:ResourceTag/ommon-fate-aws-proxy-access-role" = "true"
+          }
+        }
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_group_policy_attachment" "assume_role_policy_attachment" {
+  group      = aws_iam_role.proxy_ecs_task_role.name
+  policy_arn = aws_iam_policy.tagged_assume_role_policy.arn
+}
 
 resource "aws_iam_role_policy_attachment" "ecs_task_role_ssm" {
   role       = aws_iam_role.proxy_ecs_task_role.name
