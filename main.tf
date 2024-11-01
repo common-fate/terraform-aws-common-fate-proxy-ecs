@@ -136,8 +136,8 @@ resource "aws_iam_policy" "tagged_assume_role_policy" {
 }
 
 
-resource "aws_iam_group_policy_attachment" "assume_role_policy_attachment" {
-  group      = aws_iam_role.proxy_ecs_task_role.name
+resource "aws_iam_role_policy_attachment" "assume_role_policy_attachment" {
+  role       = aws_iam_role.proxy_ecs_task_role.name
   policy_arn = aws_iam_policy.tagged_assume_role_policy.arn
 }
 
