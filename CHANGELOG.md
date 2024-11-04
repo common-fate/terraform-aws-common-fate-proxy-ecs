@@ -1,5 +1,16 @@
 # @common-fate/terraform-aws-common-fate-proxy-ecs
 
+## 2.1.0
+
+### Minor Changes
+
+- a2d5af3: Added support for Audited EKS Cluster Access
+
+### Patch Changes
+
+- a2d5af3: Replace error level of some logs with info logging to minimise noise levels
+- 15f7c34: allow proxy task role to assume roles with a specific tag
+
 ## 2.0.6
 
 ### Patch Changes
